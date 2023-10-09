@@ -34,6 +34,8 @@ registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // Finally, a new route is registered. Any request that's a page navigation will be managed by this Cache First strategy, either pulling from the cache or the network and then caching the response.
 registerRoute(
+  
+  // This route starts by determining if the type of request is a style, a script, or a worker, corresponding to CSS, JavaScript, or Web Workers. If it is, it uses a Stale While Revalidate strategy, trying to serve from the cache first, falling back to the network if not available, while trying to update the version in cache from the network if possible. Like the page strategy, this strategy will only cache good responses.
   ({ request }) => ['style', 'script', 'worker'].includes(request.destination),
   new StaleWhileRevalidate({
     cacheName: 'asset-cache',
